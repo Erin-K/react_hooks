@@ -3,6 +3,17 @@ import ReactDom from "react-dom";
 import Axios from "axios";
 import "./styles.css";
 
+const content = [
+  {
+    tab: "Selection 1",
+    content: "I'm the content of the Section 1"
+  },
+  {
+    tab: "Selection 2",
+    content: "I'm the content of the Section 2"
+  }
+]
+
 const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
   const onChange = (event) => {
@@ -43,11 +54,25 @@ function useFetch(url) {
   return { payload, loading, error };
 }
 
+const useTabs = (initialTab, allTabs) => {
+  const [currentIndex, setCurrentIndex] = useState(initialTab);
+  if(! allTabs || !Array.isArray(allTabs)) {
+    return;
+  }
+  return {
+    currentItem: allTabs[currentIndex],
+    changeItem: setCurrentIndex // function
+  };
+}
+
 export default function HooksUtils() {
   const maxLen = (value) => value.length < 10;
   const name = useInput("Erin", maxLen);
   const { payload, loading, error } = useFetch("https://randomuser.me/api/");
   // console.log(payload, loading, error);
+
+  const { currentItem, changeItem } = useTabs(0, content);
+
   return (
     <div className="App">
       <h1>User Hooks</h1>
@@ -64,6 +89,10 @@ export default function HooksUtils() {
           alt={payload.results[0].name}
         />
       )}
+      <p> ****************** </p>
+      <h1>UseTabs</h1>
+        {content.map((section, index) => <button onClick={() => changeItem(index)} key={index}>{section.tab}</button>)}
+        <div>{currentItem.content}</div>
     </div>
   );
 }
