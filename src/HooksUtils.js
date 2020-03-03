@@ -3,13 +3,20 @@ import ReactDom from "react-dom";
 import Axios from "axios";
 import "./styles.css";
 
-const useInput = (initialValue) => {
+const useInput = (initialValue, validator) => {
   const [value, setValue] = useState(initialValue);
   const onChange = (event) => {
     // console.log(event.target);
     const { target: { value }} = event;
-    setValue(value);
+    let willUpdate = true;
+    if (typeof validator === 'function') {
+      willUpdate = validator(value);
+    }
+    if (willUpdate) {
+      setValue(value)
+    }
   }
+  
   return { value, onChange };
 }
 
@@ -37,7 +44,8 @@ function useFetch(url) {
 }
 
 export default function HooksUtils() {
-  const name = useInput("Erin");
+  const maxLen = (value) => value.length < 10;
+  const name = useInput("Erin", maxLen);
   const { payload, loading, error } = useFetch("https://randomuser.me/api/");
   // console.log(payload, loading, error);
   return (
