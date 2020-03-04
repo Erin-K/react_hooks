@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { setState, useState, useEffect } from "react";
 import ReactDom from "react-dom";
 import Axios from "axios";
 import "./styles.css";
@@ -65,6 +65,16 @@ const useTabs = (initialTab, allTabs) => {
   };
 }
 
+const useTitle = (initialTitle) => {
+  const [title, setTitle] = useState(initialTitle);
+  const updateTitle = () => {
+    const htmlTitle = document.querySelector('title'); // <title></title>
+    htmlTitle.innerText = title;
+  };
+  useEffect(updateTitle, [title]); // title이 업데이트 되면 updateTitle을 실행
+  return setTitle;
+}
+
 export default function HooksUtils() {
   const maxLen = (value) => value.length < 10;
   const name = useInput("Erin", maxLen);
@@ -72,6 +82,9 @@ export default function HooksUtils() {
   // console.log(payload, loading, error);
 
   const { currentItem, changeItem } = useTabs(0, content);
+
+  const titleUpdater = useTitle('Loading...');
+  setTimeout(() => titleUpdater('Home'),3000)
 
   return (
     <div className="App">
