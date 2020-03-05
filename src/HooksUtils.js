@@ -1,5 +1,5 @@
-import React, { setState, useState, useEffect } from "react";
-import ReactDom from "react-dom";
+import React, { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import Axios from "axios";
 import "./styles.css";
 
@@ -75,6 +75,24 @@ const useTitle = (initialTitle) => {
   return setTitle;
 }
 
+const useClick = (onClick) => {
+  if(typeof onClick !== 'function') {
+    return;
+  }
+  const element = useRef();
+  useEffect(() => {
+    if (element.current) { //componentDidMount
+      element.current.addEventListener("click", onClick);
+    }
+    return () => { //componentWillUnMount
+      if (element.current) {
+        element.current.removeEventListener('click', onClick)
+      }
+    };
+  },[]); // [] dependence가 없다 = componentWillMount가 없다.
+  return element;
+}
+
 export default function HooksUtils() {
   const maxLen = (value) => value.length < 10;
   const name = useInput("Erin", maxLen);
@@ -85,6 +103,17 @@ export default function HooksUtils() {
 
   const titleUpdater = useTitle('Loading...');
   setTimeout(() => titleUpdater('Home'),3000)
+
+  const potato = useRef();
+  // console.log(potato); // {current: input}
+  // console.log(potato.current); // <input placeholder="la">
+  // setTimeout(() => {potato.current.focus()}, 5000);
+  // setTimeout(() => console.log(potato), 5000) // object "current"
+  
+  const sayHello = () => {
+    console.log('say hello')
+  }
+  const title = useClick(sayHello);
 
   return (
     <div className="App">
@@ -106,6 +135,10 @@ export default function HooksUtils() {
       <h1>UseTabs</h1>
         {content.map((section, index) => <button onClick={() => changeItem(index)} key={index}>{section.tab}</button>)}
         <div>{currentItem.content}</div>
-    </div>
+      <p> ****************** </p>
+      <h1>UseEffect(useClick)</h1>
+      <input ref={potato} placeholder="la" />
+      <p ref={title}>Hi</p>
+    </div>  
   );
 }
