@@ -76,13 +76,13 @@ const useTitle = (initialTitle) => {
 }
 
 const useClick = (onClick) => {
-  if(typeof onClick !== 'function') {
-    return;
-  }
   const element = useRef();
+  
   useEffect(() => {
-    if (element.current) { //componentDidMount
-      element.current.addEventListener("click", onClick);
+    if(typeof onClick !== 'function') {
+      if (element.current) { //componentDidMount
+        element.current.addEventListener("click", onClick);
+      }
     }
     return () => { //componentWillUnMount
       if (element.current) {
