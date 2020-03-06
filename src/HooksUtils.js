@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import Axios from "axios";
 import "./styles.css";
 
@@ -75,9 +75,9 @@ const useTitle = (initialTitle) => {
   return setTitle;
 }
 
+//useRef 활용-1
 const useClick = (onClick) => {
   const element = useRef();
-  
   useEffect(() => {
     if(typeof onClick !== 'function') {
       if (element.current) { //componentDidMount
@@ -93,6 +93,24 @@ const useClick = (onClick) => {
   return element;
 }
 
+//useRef 활용-2
+const useHover = onHover => {
+  const element = useRef();
+  useEffect(() => {
+    if (typeof onHover !== "function") {
+      if (element.current) {
+        element.current.addEventListener("mouseenter", onHover);
+      }
+    }
+    return () => {
+      if (element.current) {
+        element.current.removeEventListener("mouseenter", onHover);
+      }
+    };
+  }, []);
+  return element;
+};
+
 export default function HooksUtils() {
   const maxLen = (value) => value.length < 10;
   const name = useInput("Erin", maxLen);
@@ -105,15 +123,14 @@ export default function HooksUtils() {
   setTimeout(() => titleUpdater('Home'),3000)
 
   const potato = useRef();
+  // setTimeout(() => {potato.current.focus()}, 5000);
   // console.log(potato); // {current: input}
   // console.log(potato.current); // <input placeholder="la">
-  // setTimeout(() => {potato.current.focus()}, 5000);
   // setTimeout(() => console.log(potato), 5000) // object "current"
   
-  const sayHello = () => {
-    console.log('say hello')
-  }
+  const sayHello = () => console.log('say hello');
   const title = useClick(sayHello);
+  const hover = useHover(sayHello);
 
   return (
     <div className="App">
@@ -136,9 +153,10 @@ export default function HooksUtils() {
         {content.map((section, index) => <button onClick={() => changeItem(index)} key={index}>{section.tab}</button>)}
         <div>{currentItem.content}</div>
       <p> ****************** </p>
-      <h1>UseEffect(useClick)</h1>
+      <h1>UseEffect(useClick, useHover)</h1>
       <input ref={potato} placeholder="la" />
       <p ref={title}>Hi</p>
+      <p className="useRef2" ref={hover}></p>
     </div>  
   );
 }
