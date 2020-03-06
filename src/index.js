@@ -5,6 +5,8 @@ import App from "./Compare";
 import HooksDefault from "./HooksDefault";
 import HooksUtils from "./HooksUtils";
 import UseEffect from "./UseEffect";
+import UseConfirm from "./UseConfirm";
+import PreventLeave from "./PreventLeave";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
@@ -22,6 +24,14 @@ ReactDOM.render(
     <p>----------------------------------------------------------------------------------------------------</p>
     <br />
     <UseEffect />
+    <br />
+    <p>----------------------------------------------------------------------------------------------------</p>
+    <br />
+    <UseConfirm />
+    <br />
+    <p>----------------------------------------------------------------------------------------------------</p>
+    <br />
+    <PreventLeave />
   </React.StrictMode>,
   rootElement
 );
