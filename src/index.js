@@ -6,7 +6,8 @@ import HooksDefault from "./HooksDefault";
 import HooksUtils from "./HooksUtils";
 import UseEffect from "./UseEffect";
 import UseConfirm from "./UseConfirm";
-import PreventLeave from "./PreventLeave";
+import PreventLeave from "./usePreventLeave";
+import FadeIn from "./FadeIn";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
@@ -32,6 +33,10 @@ ReactDOM.render(
     <p>----------------------------------------------------------------------------------------------------</p>
     <br />
     <PreventLeave />
+    <br />
+    <p>----------------------------------------------------------------------------------------------------</p>
+    <br />
+    <FadeIn />
   </React.StrictMode>,
   rootElement
 );
